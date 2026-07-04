@@ -31,11 +31,11 @@ Acestea sunt 2–4 răspunsuri scurte (max. 6 cuvinte fiecare) pe care utilizato
 export const MODES: Record<ModeId, Mode> = {
   cv: {
     id: "cv",
-    emoji: "📄",
-    title: "Îmbunătățește-mi CV-ul",
+    emoji: "✍️",
+    title: "Îmbunătățește-mi CV\u2060-\u2060ul",
     tagline: "Transformă-ți CV-ul într-unul care trece de filtre și ajunge la interviu.",
     welcome:
-      "Salut! 👋 Hai să-ți facem un CV care chiar ajunge la interviu.\n\nCa să te ajut cât mai bine, spune-mi mai întâi: pentru ce fel de job vrei să-ți pregătim CV-ul?",
+      "Hai să-ți facem un CV care chiar ajunge la interviu — nu unul care se pierde printre alte 200.\n\nSpune-mi mai întâi: pentru ce fel de job îl pregătim?",
     quickStarts: [
       "Am deja un CV, vreau să-l îmbunătățim",
       "Nu am CV, pornim de la zero",
@@ -57,11 +57,11 @@ Cadrul tău de lucru (îl aplici, nu îl predai):
 
   interviu: {
     id: "interviu",
-    emoji: "🎤",
+    emoji: "☕",
     title: "Pregătește-mă de interviu",
     tagline: "Simulează interviul, primește feedback și du-te pregătit(ă) la cel real.",
     welcome:
-      "Salut! 👋 Hai să te pregătim ca la carte pentru interviu.\n\nSpune-mi mai întâi: pentru ce poziție dai interviu?",
+      "Interviul se câștigă înainte să intri în sală. Hai să te pregătim ca lumea.\n\nSpune-mi mai întâi: pentru ce poziție dai interviu?",
     quickStarts: [
       "Vreau o simulare completă de interviu",
       "Ajută-mă cu întrebarea „Povestește-mi despre tine”",
@@ -83,11 +83,11 @@ Cadrul tău de lucru:
 
   business: {
     id: "business",
-    emoji: "💡",
+    emoji: "🛍️",
     title: "Ajută-mă să încep un business",
     tagline: "De la idee la primii clienți plătitori, pas cu pas, fără teorie inutilă.",
     welcome:
-      "Salut! 👋 Hai să transformăm ideea ta în ceva concret.\n\nSpune-mi mai întâi unde te afli acum:",
+      "Hai să trecem de la „ar fi frumos să…” la ceva concret, cu primii bani încasați.\n\nSpune-mi mai întâi unde te afli acum:",
     quickStarts: [
       "Am o idee, dar nu știu de unde să încep",
       "Nu am nicio idee, dar vreau un venit în plus",
@@ -110,11 +110,11 @@ Cadrul tău de lucru (drumul de la idee la primii bani, adaptat la România):
 
   continut: {
     id: "continut",
-    emoji: "📱",
+    emoji: "📸",
     title: "Creează-mi conținut",
     tagline: "Conținut de Instagram care îți crește pagina — idei, scripturi și calendar.",
     welcome:
-      "Salut! 👋 Hai să-ți facem conținut care chiar crește pagina.\n\nSpune-mi mai întâi despre pagina ta:",
+      "Hai să-ți facem conținut care chiar crește pagina — nu doar postări de dragul postatului.\n\nSpune-mi mai întâi despre pagina ta:",
     quickStarts: [
       "Vreau idei de postări pentru nișa mea",
       "Scrie-mi un script de Reel",

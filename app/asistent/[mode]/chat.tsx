@@ -105,10 +105,12 @@ export default function Chat({ modeId, emoji, title, tagline, welcome, quickStar
           ←
         </Link>
         <div className="chat-header-titles">
+          <span className="kicker" title={tagline}>
+            Asistentul tău AI
+          </span>
           <h1>
             {emoji} {title}
           </h1>
-          <p>{tagline}</p>
         </div>
       </header>
 
@@ -146,7 +148,7 @@ export default function Chat({ modeId, emoji, title, tagline, welcome, quickStar
         <textarea
           className="chat-input"
           rows={1}
-          placeholder="Scrie aici… (sau apasă un buton de mai sus)"
+          placeholder="Scrie aici…"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={onKeyDown}

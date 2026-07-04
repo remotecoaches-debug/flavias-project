@@ -1,17 +1,12 @@
 :root {
-  --bg: #f6f2ec;
-  --bg-card: #ffffff;
-  --ink: #241c2b;
-  --ink-soft: #6d6377;
-  --accent: #b4552d;
-  --accent-soft: #f3e0d5;
-  --accent-ink: #8a3d1d;
-  --border: #e6ddd2;
-  --user-bubble: #241c2b;
-  --user-bubble-ink: #f6f2ec;
-  --radius: 16px;
-  --font-display: Georgia, "Times New Roman", serif;
-  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --paper: #fbf8f2;
+  --ink: #141210;
+  --ink-soft: #6f6a61;
+  --line: #141210;
+  --line-soft: #e3ddd1;
+  --marker: #ffd633;
+  --marker-soft: #fff3bf;
+  --card: #ffffff;
 }
 
 * {
@@ -26,9 +21,9 @@ body {
 }
 
 body {
-  background: var(--bg);
+  background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-body);
+  font-family: var(--font-body, -apple-system, "Segoe UI", Roboto, sans-serif);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }
@@ -43,102 +38,136 @@ button {
   cursor: pointer;
 }
 
+.kicker {
+  font-family: var(--font-mono, "Courier New", monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/* Evidențiere cu „marker" — dungă galbenă ușor strâmbă sub cuvânt */
+.hl {
+  font-style: italic;
+  position: relative;
+  white-space: nowrap;
+}
+
+.hl::before {
+  content: "";
+  position: absolute;
+  left: -0.08em;
+  right: -0.12em;
+  bottom: 0.04em;
+  height: 0.42em;
+  background: var(--marker);
+  transform: rotate(-1.2deg);
+  z-index: -1;
+}
+
 /* ---------- Landing ---------- */
 
 .landing {
-  max-width: 680px;
+  max-width: 640px;
   margin: 0 auto;
-  padding: 48px 20px 64px;
+  min-height: 100dvh;
+  padding: 44px 22px 56px;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 40px;
 }
 
 .landing-header {
-  text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-
-.landing-badge {
-  align-self: center;
-  background: var(--accent-soft);
-  color: var(--accent-ink);
-  font-size: 13px;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: 999px;
-  letter-spacing: 0.02em;
+  gap: 16px;
+  padding-top: 8px;
 }
 
 .landing-title {
-  font-family: var(--font-display);
-  font-size: clamp(34px, 6vw, 48px);
-  line-height: 1.1;
-  font-weight: 700;
-}
-
-.landing-title em {
-  color: var(--accent);
-  font-style: italic;
+  font-family: var(--font-display, Georgia, serif);
+  font-weight: 400;
+  font-size: clamp(46px, 11vw, 72px);
+  line-height: 0.98;
+  letter-spacing: -0.01em;
 }
 
 .landing-sub {
   color: var(--ink-soft);
-  font-size: 17px;
-  max-width: 480px;
-  margin: 0 auto;
+  font-size: 16.5px;
+  max-width: 440px;
 }
 
-.mode-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-}
-
-@media (min-width: 560px) {
-  .mode-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.mode-card {
+.mode-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 22px 20px;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+  border-top: 2px solid var(--line);
 }
 
-.mode-card:hover {
-  transform: translateY(-2px);
-  border-color: var(--accent);
-  box-shadow: 0 8px 24px rgba(36, 28, 43, 0.08);
+.mode-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 18px;
+  align-items: center;
+  padding: 22px 6px;
+  border-bottom: 1px solid var(--line-soft);
+  transition: background 0.12s ease;
 }
 
-.mode-card .emoji {
-  font-size: 28px;
+.mode-row:hover {
+  background: var(--marker-soft);
 }
 
-.mode-card h2 {
-  font-family: var(--font-display);
-  font-size: 20px;
+.mode-num {
+  font-family: var(--font-mono, "Courier New", monospace);
+  font-size: 12px;
   font-weight: 700;
+  color: var(--ink-soft);
+  padding-top: 4px;
+  align-self: start;
 }
 
-.mode-card p {
+.mode-body h2 {
+  font-family: var(--font-display, Georgia, serif);
+  font-weight: 400;
+  font-size: 27px;
+  line-height: 1.08;
+}
+
+.mode-body h2 .mode-emoji {
+  font-size: 21px;
+  margin-right: 8px;
+}
+
+.mode-body p {
   color: var(--ink-soft);
   font-size: 14.5px;
+  margin-top: 5px;
+  max-width: 420px;
+}
+
+.mode-arrow {
+  font-size: 22px;
+  transition: transform 0.12s ease;
+}
+
+.mode-row:hover .mode-arrow {
+  transform: translateX(4px);
 }
 
 .landing-footer {
-  text-align: center;
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
   color: var(--ink-soft);
-  font-size: 13.5px;
+  font-size: 13px;
+}
+
+.landing-footer .kicker {
+  color: var(--ink-soft);
 }
 
 /* ---------- Chat ---------- */
@@ -147,50 +176,63 @@ button {
   display: flex;
   flex-direction: column;
   height: 100dvh;
-  max-width: 760px;
+  max-width: 720px;
   margin: 0 auto;
+  border-left: 1px solid var(--line-soft);
+  border-right: 1px solid var(--line-soft);
+  background: var(--paper);
 }
 
 .chat-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
+  gap: 14px;
+  padding: 14px 18px;
+  border-bottom: 2px solid var(--line);
+  background: var(--paper);
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
 .chat-back {
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  border-radius: 10px;
-  width: 36px;
-  height: 36px;
-  font-size: 18px;
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  border-radius: 0;
+  width: 38px;
+  height: 38px;
+  font-size: 17px;
   line-height: 1;
   color: var(--ink);
   flex-shrink: 0;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: box-shadow 0.1s ease, transform 0.1s ease;
+}
+
+.chat-back:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--ink);
 }
 
 .chat-header-titles {
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
 }
 
 .chat-header h1 {
-  font-family: var(--font-display);
-  font-size: 17px;
-  font-weight: 700;
+  font-family: var(--font-display, Georgia, serif);
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 1.1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.chat-header p {
+.chat-header .kicker {
   color: var(--ink-soft);
-  font-size: 12.5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -199,84 +241,96 @@ button {
 .chat-scroll {
   flex: 1;
   overflow-y: auto;
-  padding: 20px 16px 8px;
+  padding: 24px 18px 10px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .bubble {
   max-width: 88%;
-  padding: 12px 16px;
-  border-radius: var(--radius);
+  padding: 13px 16px;
   font-size: 15px;
   white-space: pre-wrap;
   overflow-wrap: break-word;
 }
 
 .bubble.assistant {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-bottom-left-radius: 6px;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 2px 14px 14px 14px;
   align-self: flex-start;
+  box-shadow: 3px 3px 0 rgba(20, 18, 16, 0.08);
 }
 
 .bubble.user {
-  background: var(--user-bubble);
-  color: var(--user-bubble-ink);
-  border-bottom-right-radius: 6px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 14px 2px 14px 14px;
   align-self: flex-end;
 }
 
 .typing {
   align-self: flex-start;
   color: var(--ink-soft);
-  font-size: 14px;
+  font-family: var(--font-mono, "Courier New", monospace);
+  font-size: 12.5px;
   padding: 4px 8px;
 }
 
 .suggestions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  padding: 4px 16px 10px;
+  gap: 10px;
+  padding: 6px 18px 12px;
 }
 
 .suggestion-btn {
-  background: var(--accent-soft);
-  color: var(--accent-ink);
-  border: 1px solid transparent;
+  background: var(--card);
+  color: var(--ink);
+  border: 1.5px solid var(--line);
   border-radius: 999px;
   padding: 9px 16px;
   font-size: 14px;
   font-weight: 600;
-  transition: background 0.12s ease;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: background 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.suggestion-btn:nth-child(odd) {
+  transform: rotate(-0.6deg);
+}
+
+.suggestion-btn:nth-child(even) {
+  transform: rotate(0.5deg);
 }
 
 .suggestion-btn:hover {
-  background: #ecd2c2;
+  background: var(--marker);
+  transform: translate(1px, 1px) rotate(0deg);
+  box-shadow: 1px 1px 0 var(--ink);
 }
 
 .suggestion-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: default;
 }
 
 .chat-inputbar {
   display: flex;
   gap: 10px;
-  padding: 12px 16px calc(14px + env(safe-area-inset-bottom));
-  border-top: 1px solid var(--border);
-  background: var(--bg);
+  padding: 14px 18px calc(16px + env(safe-area-inset-bottom));
+  border-top: 2px solid var(--line);
+  background: var(--paper);
 }
 
 .chat-input {
   flex: 1;
   resize: none;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--bg-card);
-  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 0;
+  background: var(--card);
+  padding: 11px 14px;
   font-family: inherit;
   font-size: 15px;
   color: var(--ink);
@@ -284,22 +338,34 @@ button {
   outline: none;
 }
 
+.chat-input::placeholder {
+  color: #a49e93;
+}
+
 .chat-input:focus {
-  border-color: var(--accent);
+  box-shadow: 2px 2px 0 var(--ink);
 }
 
 .chat-send {
   align-self: flex-end;
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 14px;
-  padding: 12px 18px;
-  font-size: 15px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 0;
+  padding: 11px 18px;
+  font-size: 14px;
   font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 2px 2px 0 rgba(20, 18, 16, 0.35);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.chat-send:hover:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 rgba(20, 18, 16, 0.35);
 }
 
 .chat-send:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: default;
 }
