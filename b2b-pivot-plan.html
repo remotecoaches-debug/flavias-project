@@ -1,0 +1,816 @@
+<title>B2B Pivot Plan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --bg: #f4f1ec;
+    --bg-card: #ffffff;
+    --bg-card-alt: #eee9e0;
+    --bg-phase: #f9f7f4;
+    --text: #1a1e2a;
+    --text-muted: #555a6a;
+    --text-faint: #888c9a;
+    --accent: #1a6b5a;
+    --accent-light: #e8f5f1;
+    --accent-dark: #145548;
+    --gold: #b8860b;
+    --gold-light: #fdf6e3;
+    --blue: #2d5f8a;
+    --blue-light: #e8f0f8;
+    --red: #c44b2b;
+    --red-light: #fdf0ec;
+    --border: #ddd6cb;
+    --border-light: #e8e2d8;
+    --purple: #6b4c8a;
+    --purple-light: #f3eef8;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #111520;
+      --bg-card: #1a1f2e;
+      --bg-card-alt: #20263a;
+      --bg-phase: #161b28;
+      --text: #e0dcd6;
+      --text-muted: #9498a8;
+      --text-faint: #60647a;
+      --accent: #3aab90;
+      --accent-light: #162a25;
+      --accent-dark: #4cc4a8;
+      --gold: #d4a832;
+      --gold-light: #2a2518;
+      --blue: #5a9ad0;
+      --blue-light: #182535;
+      --red: #e06040;
+      --red-light: #2d1f1a;
+      --border: #2a3044;
+      --border-light: #222838;
+      --purple: #9a7cc0;
+      --purple-light: #221e30;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #111520;
+    --bg-card: #1a1f2e;
+    --bg-card-alt: #20263a;
+    --bg-phase: #161b28;
+    --text: #e0dcd6;
+    --text-muted: #9498a8;
+    --text-faint: #60647a;
+    --accent: #3aab90;
+    --accent-light: #162a25;
+    --accent-dark: #4cc4a8;
+    --gold: #d4a832;
+    --gold-light: #2a2518;
+    --blue: #5a9ad0;
+    --blue-light: #182535;
+    --red: #e06040;
+    --red-light: #2d1f1a;
+    --border: #2a3044;
+    --border-light: #222838;
+    --purple: #9a7cc0;
+    --purple-light: #221e30;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrapper { max-width: 800px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  header {
+    text-align: center;
+    padding: 48px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 44px;
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(26px, 5vw, 40px);
+    font-weight: 900;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 12px;
+    text-wrap: balance;
+  }
+
+  .subtitle { color: var(--text-muted); font-size: 16px; max-width: 50ch; margin: 0 auto; }
+
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text);
+    margin-bottom: 14px;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 10px;
+  }
+
+  p { margin-bottom: 12px; max-width: 65ch; }
+
+  .section { margin-bottom: 48px; }
+
+  .divider { height: 1px; background: var(--border); margin: 48px 0; }
+
+  /* STRATEGY BLOCK */
+  .strategy-block {
+    background: var(--accent-light);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 24px 28px;
+    margin-bottom: 28px;
+  }
+  .strategy-block p { color: var(--text); margin-bottom: 0; max-width: none; font-size: 15px; }
+  .strategy-block strong { color: var(--accent); }
+
+  /* STOP / START */
+  .dual-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 560px) { .dual-grid { grid-template-columns: 1fr; } }
+
+  .stop-card, .start-card {
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid var(--border-light);
+  }
+  .stop-card { background: var(--red-light); border-color: var(--red); }
+  .start-card { background: var(--accent-light); border-color: var(--accent); }
+  .stop-card h3 { color: var(--red); }
+  .start-card h3 { color: var(--accent); }
+
+  .stop-card ul, .start-card ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .stop-card li, .start-card li {
+    font-size: 14px;
+    color: var(--text-muted);
+    padding: 4px 0;
+    padding-left: 20px;
+    position: relative;
+  }
+  .stop-card li::before { content: '✕'; position: absolute; left: 0; color: var(--red); font-weight: 700; font-size: 12px; }
+  .start-card li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+
+  /* PHASE CARDS */
+  .phase {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .phase::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+  }
+  .phase.p1::before { background: var(--red); }
+  .phase.p2::before { background: var(--gold); }
+  .phase.p3::before { background: var(--blue); }
+  .phase.p4::before { background: var(--accent); }
+  .phase.p5::before { background: var(--purple); }
+
+  .phase-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .phase-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 4px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .phase.p1 .phase-tag { background: var(--red-light); color: var(--red); }
+  .phase.p2 .phase-tag { background: var(--gold-light); color: var(--gold); }
+  .phase.p3 .phase-tag { background: var(--blue-light); color: var(--blue); }
+  .phase.p4 .phase-tag { background: var(--accent-light); color: var(--accent); }
+  .phase.p5 .phase-tag { background: var(--purple-light); color: var(--purple); }
+
+  .phase h2 { margin-bottom: 0; }
+
+  .phase .body { margin-top: 14px; }
+  .phase .body p { max-width: none; color: var(--text-muted); font-size: 14px; }
+
+  .checklist {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0 0;
+  }
+  .checklist li {
+    font-size: 14px;
+    color: var(--text-muted);
+    padding: 6px 0 6px 28px;
+    position: relative;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 10px;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--border);
+    border-radius: 3px;
+  }
+  .checklist li strong { color: var(--text); }
+
+  /* TABLES */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0 20px;
+    border-radius: 10px;
+    border: 1px solid var(--border-light);
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+  thead { background: var(--bg-card-alt); }
+  th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    padding: 11px 14px;
+    text-align: left;
+    white-space: nowrap;
+  }
+  td { padding: 10px 14px; border-top: 1px solid var(--border-light); color: var(--text-muted); }
+  td.num { font-family: 'JetBrains Mono', monospace; font-size: 12px; text-align: right; font-weight: 500; }
+  td.accent { color: var(--accent); font-weight: 600; }
+
+  /* CONTENT PILLARS */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin: 16px 0 20px;
+  }
+  .pillar {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .pillar-pct {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .pillar h3 { font-size: 14px; margin-bottom: 4px; }
+  .pillar p { font-size: 12px; color: var(--text-faint); margin: 0; max-width: none; }
+
+  /* AD TARGETING */
+  .targeting-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 14px;
+  }
+  .targeting-card h3 { color: var(--blue); }
+  .targeting-card p { font-size: 14px; color: var(--text-muted); margin-bottom: 0; max-width: none; }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    background: var(--blue-light);
+    color: var(--blue);
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+
+  /* WEBINAR */
+  .wslot {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+  .wslot-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-faint);
+    width: 50px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+  .wslot-body {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+  .wslot-body h3 { font-size: 14px; margin-bottom: 2px; }
+  .wslot-body p { font-size: 13px; color: var(--text-muted); margin: 0; max-width: none; }
+
+  /* MATH */
+  .math-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin: 16px 0;
+  }
+  .math-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+  }
+  .math-box .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 4px;
+  }
+  .math-box .value {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.2;
+  }
+  .math-box .note { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
+
+  footer {
+    text-align: center;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    color: var(--text-faint);
+    font-size: 12px;
+  }
+  footer .stamp {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 560px) {
+    .wrapper { padding: 24px 16px 60px; }
+    .phase { padding: 20px; }
+    .pillars { grid-template-columns: 1fr; }
+    .math-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+
+<div class="wrapper">
+
+  <header>
+    <div class="eyebrow">Strategic Pivot &middot; September 2026</div>
+    <h1>From Job Seekers to Businesses</h1>
+    <div class="subtitle">5-phase plan to build a B2B audience and sell Yago AI automations through a webinar</div>
+  </header>
+
+  <!-- THE PIVOT -->
+  <div class="section">
+    <div class="strategy-block">
+      <p><strong>The core shift:</strong> Stop selling &euro;47&ndash;147 digital products to job seekers. Start selling &euro;1,500&ndash;5,000 AI automation services to Romanian businesses. Your Instagram becomes a Yago demo channel. Your ads target business owners and decision-makers. Your next webinar speaks to companies drowning in manual processes, not people looking for remote jobs.</p>
+    </div>
+
+    <div class="dual-grid">
+      <div class="stop-card">
+        <h3>Stop Immediately</h3>
+        <ul>
+          <li>Selling AI courses at &euro;50&ndash;147 to job seekers</li>
+          <li>Posting remote job tips / CV advice on Instagram</li>
+          <li>Promoting the &euro;24 kit, &euro;39 package, &euro;59 English course on Beacons</li>
+          <li>Running ads targeting job seekers</li>
+          <li>Creating new products for the B2C audience</li>
+          <li>Changing prices on existing products (confuses further)</li>
+        </ul>
+      </div>
+      <div class="start-card">
+        <h3>Start This Week</h3>
+        <ul>
+          <li>Post Yago automation demos on Instagram</li>
+          <li>Update bio + link-in-bio to Yago</li>
+          <li>Build a B2B landing page for the webinar</li>
+          <li>Create a Meta Ads campaign targeting business owners</li>
+          <li>Draft the B2B webinar script</li>
+          <li>Set up a 5-email post-webinar sequence in Kit</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PHASE 1: CLEAN HOUSE -->
+  <div class="section">
+    <div class="phase p1">
+      <div class="phase-head">
+        <span class="phase-tag">Week 1</span>
+        <h2>Clean House</h2>
+      </div>
+      <div class="body">
+        <p>Remove the clutter that's confusing your audience. You don't need to delete your old products &mdash; just hide them. The goal is that anyone who finds you sees ONE clear message: AI automation for businesses.</p>
+        <ul class="checklist">
+          <li><strong>Hide old offers from Beacons:</strong> Remove the &euro;24 kit, &euro;39 package, &euro;59 English AI, &euro;50 AI Operator page. Don't delete &mdash; just unpublish or hide.</li>
+          <li><strong>Update Instagram bio:</strong> Change to something like "AI Automation for Romanian Businesses | Yago.ai" with a link to the new B2B landing page.</li>
+          <li><strong>Fix the Flavia Popescu ad account:</strong> Appeal the "unusual activity" flag. You need both ad accounts available.</li>
+          <li><strong>Clean up Kit tags:</strong> Create new tags for B2B leads (e.g., "b2b-lead", "webinar-business-sept", "yago-interest"). Keep old tags but don't use them for new campaigns.</li>
+          <li><strong>Create a Kit registration form</strong> for the B2B webinar (not Zoom-only). You need to track registrations &rarr; attendance &rarr; sales.</li>
+          <li><strong>Set up Stripe properly:</strong> Create clean checkout links for the B2B offer tiers. Test the full flow: checkout &rarr; confirmation email &rarr; WhatsApp &rarr; onboarding.</li>
+          <li><strong>Complete yAGO Terms &amp; Privacy</strong> (still has template placeholders per the Growth Reset P0 list).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 2: INSTAGRAM CONTENT PIVOT -->
+  <div class="section">
+    <div class="phase p2">
+      <div class="phase-head">
+        <span class="phase-tag">Weeks 1&ndash;4</span>
+        <h2>Instagram Content Pivot</h2>
+      </div>
+      <div class="body">
+        <p>Your ~30K followers are mostly job seekers. You won't convert them &mdash; that's fine. The new content serves two purposes: <strong>attract business owners through the algorithm</strong> (Reels about automation get served to business accounts) and <strong>build credibility</strong> so when B2B leads from ads check your profile, they see authority.</p>
+
+        <h4>Content Pillars</h4>
+        <div class="pillars">
+          <div class="pillar">
+            <div class="pillar-pct">40%</div>
+            <h3>Yago Demos</h3>
+            <p>Screen recordings of real automations: invoice processing, lead qualification, content repurposing. Show the before (manual) vs. after (automated). 30&ndash;60 sec Reels.</p>
+          </div>
+          <div class="pillar">
+            <div class="pillar-pct">25%</div>
+            <h3>Business Pain Points</h3>
+            <p>"How many hours does your team spend on [manual task]?" Hook with the problem. Agitate with the cost. Tease the solution. End with CTA to DM or link.</p>
+          </div>
+          <div class="pillar">
+            <div class="pillar-pct">20%</div>
+            <h3>Results &amp; Proof</h3>
+            <p>Case studies from your pilot clients. "We saved [Company] 12 hours/week on invoicing." Screenshots of automations running. Client testimonials (even short voice notes).</p>
+          </div>
+          <div class="pillar">
+            <div class="pillar-pct">15%</div>
+            <h3>5-Day Challenge CTA</h3>
+            <p>Promote the &euro;47 Challenge as the entry point: "Want to see AI automation in your business? Start with the 5-Day Challenge." This is your warm-up offer.</p>
+          </div>
+        </div>
+
+        <h4>Posting Cadence</h4>
+        <p>4&ndash;5 Reels per week. 2&ndash;3 Stories daily (behind the scenes of building automations, polls asking "what do you automate?"). 1 carousel per week (educational: "5 processes every agency should automate"). Use Romanian + English captions to reach both markets.</p>
+
+        <h4>Hashtag Strategy for B2B Discovery</h4>
+        <div class="tag-row">
+          <span class="tag">#automatizare</span>
+          <span class="tag">#AIpentruafaceri</span>
+          <span class="tag">#n8n</span>
+          <span class="tag">#automatizariAI</span>
+          <span class="tag">#businessautomation</span>
+          <span class="tag">#agentiirecrutare</span>
+          <span class="tag">#digitalromania</span>
+          <span class="tag">#YagoAI</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 3: BUILD B2B AUDIENCE WITH ADS -->
+  <div class="section">
+    <div class="phase p3">
+      <div class="phase-head">
+        <span class="phase-tag">Weeks 2&ndash;5</span>
+        <h2>Build the B2B Audience with Ads</h2>
+      </div>
+      <div class="body">
+        <p>This is the biggest change from August. You need a <strong>new audience of business decision-makers</strong>, not your existing job-seeker followers. Run two campaign types in parallel: one to build awareness, one to drive webinar registrations.</p>
+
+        <h4>Campaign 1: Awareness / Lead Magnet (Weeks 2&ndash;3)</h4>
+        <div class="targeting-card">
+          <h3>Targeting: Romanian Business Owners &amp; Managers</h3>
+          <p>Layer these interests and behaviors to reach decision-makers, not employees:</p>
+          <div class="tag-row" style="margin-top: 10px;">
+            <span class="tag">Job Title: CEO, Director, Manager, Fondator</span>
+            <span class="tag">Interest: Business automation</span>
+            <span class="tag">Interest: Artificial intelligence</span>
+            <span class="tag">Interest: n8n / Zapier / Make</span>
+            <span class="tag">Interest: CRM software</span>
+            <span class="tag">Interest: Recruitment agency</span>
+            <span class="tag">Interest: Small business owners</span>
+            <span class="tag">Behavior: Business page admins</span>
+            <span class="tag">Behavior: Small business owners</span>
+          </div>
+          <p style="margin-top: 12px;"><strong>Geo:</strong> Romania (primary), then expand to RO diaspora in EU if budget allows.<br>
+          <strong>Age:</strong> 28&ndash;55<br>
+          <strong>Exclusion:</strong> Exclude your existing "job seeker" custom audience and current Instagram followers (they're the wrong segment).<br>
+          <strong>Budget:</strong> RON 100&ndash;150/day for 14 days = RON 1,400&ndash;2,100 (~&euro;300&ndash;450)<br>
+          <strong>Objective:</strong> Lead generation or traffic to a lead magnet landing page</p>
+        </div>
+
+        <div class="targeting-card">
+          <h3>Lead Magnet Offer</h3>
+          <p>Don't send cold traffic straight to a webinar registration. First, offer a free resource that qualifies them as a business:</p>
+          <ul class="checklist">
+            <li><strong>Option A:</strong> "Ghidul AI pentru Agentii de Recrutare &mdash; 5 Procese pe Care le Poti Automatiza Azi" (PDF guide)</li>
+            <li><strong>Option B:</strong> "Audit Gratuit: Cat Timp Pierde Afacerea Ta pe Procese Manuale?" (free quiz/calculator)</li>
+            <li><strong>Option C:</strong> "Video Demo: Cum am Automatizat Facturarea pentru o Agentie in 30 de Minute" (gated video)</li>
+          </ul>
+          <p style="margin-top: 8px;">Collect email + company name + role. Tag them in Kit as "b2b-lead". This builds your B2B email list <em>before</em> the webinar.</p>
+        </div>
+
+        <h4>Campaign 2: Webinar Registration (Weeks 3&ndash;5)</h4>
+        <div class="targeting-card">
+          <h3>Targeting: Warm B2B Audience + Lookalikes</h3>
+          <p>Now retarget people who engaged with Campaign 1, plus build a Lookalike:</p>
+          <div class="tag-row" style="margin-top: 10px;">
+            <span class="tag">Custom: Lead magnet downloaders</span>
+            <span class="tag">Custom: B2B landing page visitors (30d)</span>
+            <span class="tag">Lookalike: 1% of lead magnet downloaders</span>
+            <span class="tag">Lookalike: 1% of Challenge purchasers</span>
+          </div>
+          <p style="margin-top: 12px;"><strong>Budget:</strong> RON 150&ndash;200/day for 14 days = RON 2,100&ndash;2,800 (~&euro;450&ndash;600)<br>
+          <strong>Objective:</strong> Conversions (registration)<br>
+          <strong>Creative:</strong> Video ad showing a real automation in action. "In 60 de minute, iti arat cum sa automatizezi 3 procese din afacerea ta. Gratis." Direct to Kit registration form.<br>
+          <strong>Critical:</strong> Keep ads running until webinar day. Set end date to the day after. Do NOT let them die early like August.</p>
+        </div>
+
+        <h4>Total Ad Budget</h4>
+        <div class="math-grid">
+          <div class="math-box">
+            <div class="label">Awareness</div>
+            <div class="value">&euro;300&ndash;450</div>
+            <div class="note">14 days &middot; RON 100&ndash;150/day</div>
+          </div>
+          <div class="math-box">
+            <div class="label">Registration</div>
+            <div class="value">&euro;450&ndash;600</div>
+            <div class="note">14 days &middot; RON 150&ndash;200/day</div>
+          </div>
+          <div class="math-box">
+            <div class="label">Total</div>
+            <div class="value">&euro;750&ndash;1,050</div>
+            <div class="note">~15&ndash;20&times; the August spend</div>
+          </div>
+        </div>
+        <p style="font-size: 14px; color: var(--text-muted);">This is still modest for a B2B launch. If you're targeting &euro;5,000+ in revenue from the webinar, spending &euro;750&ndash;1,050 on ads (15&ndash;20% of target) is a reasonable acquisition cost.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 4: THE WEBINAR -->
+  <div class="section">
+    <div class="phase p4">
+      <div class="phase-head">
+        <span class="phase-tag">Week 5&ndash;6</span>
+        <h2>The B2B Webinar</h2>
+      </div>
+      <div class="body">
+        <p>Completely different from August 27. This webinar speaks to business owners about their problems, shows live automation demos relevant to their operations, and offers a clear service engagement &mdash; not a course.</p>
+
+        <h4>Webinar Structure (60 min)</h4>
+
+        <div class="wslot">
+          <div class="wslot-time">0&ndash;5'</div>
+          <div class="wslot-body">
+            <h3>The Hook</h3>
+            <p>"Cat timp pierde echipa ta pe procese manuale?" Open with a bold stat: "The average Romanian SME wastes 15+ hours/week on tasks AI can handle in minutes." Establish credibility &mdash; who you are, what Yago does, clients you've helped.</p>
+          </div>
+        </div>
+
+        <div class="wslot">
+          <div class="wslot-time">5&ndash;20'</div>
+          <div class="wslot-body">
+            <h3>The Problem (3 Business Pain Points)</h3>
+            <p><strong>1.</strong> Manual invoicing / document processing eating hours. <strong>2.</strong> Lead follow-up falling through the cracks. <strong>3.</strong> Content/reporting taking entire days. For each: show the manual way, show the cost (hours x hourly rate = money lost), then tease the automated way.</p>
+          </div>
+        </div>
+
+        <div class="wslot">
+          <div class="wslot-time">20&ndash;40'</div>
+          <div class="wslot-body">
+            <h3>Live Demos (3 Automations)</h3>
+            <p><strong>Demo 1:</strong> Invoice Extractor &mdash; PDF in, structured data out, synced to accounting. <strong>Demo 2:</strong> Lead Qualifier &mdash; form submission triggers AI scoring + personalized follow-up email. <strong>Demo 3:</strong> Content Repurposer &mdash; one blog post becomes 5 social posts + newsletter. Each demo: 5 min setup, 2 min run, wow moment.</p>
+          </div>
+        </div>
+
+        <div class="wslot">
+          <div class="wslot-time">40&ndash;50'</div>
+          <div class="wslot-body">
+            <h3>The Offer</h3>
+            <p>NOT a course. A <strong>done-with-you service engagement:</strong></p>
+            <ul class="checklist" style="margin-top: 8px;">
+              <li><strong>AI Automation Audit (&euro;500):</strong> 90-min deep dive into your business processes. Identify top 3 automatable workflows. Deliver a written automation roadmap. This is the entry point &mdash; low risk, high value.</li>
+              <li><strong>Implementation Sprint (&euro;2,500):</strong> 2-week sprint. We build and deploy 3 custom automations for your business. Includes training for your team. 30 days of support.</li>
+              <li><strong>Monthly Retainer (&euro;500/mo):</strong> Ongoing optimization, new automations as needed, priority support, Yago Pro access.</li>
+            </ul>
+            <p style="margin-top: 8px;">Founding price for webinar attendees only: Audit &euro;500 (normally &euro;1,000). Sprint &euro;2,500 (normally &euro;4,500). Retainer &euro;500/mo (normally &euro;1,000/mo). Valid for 48 hours.</p>
+          </div>
+        </div>
+
+        <div class="wslot">
+          <div class="wslot-time">50&ndash;60'</div>
+          <div class="wslot-body">
+            <h3>Q&amp;A + Close</h3>
+            <p>Answer questions live. Reinforce the 48-hour deadline. CTA: "Book your Audit call" &mdash; link to a Calendly or scheduling page, not a Stripe checkout. B2B buyers want a conversation before paying &euro;500+. The call is where you close.</p>
+          </div>
+        </div>
+
+        <h4>Key Differences from August 27</h4>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Element</th><th>August 27 (B2C)</th><th>Next Webinar (B2B)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Audience</td><td>Job seekers</td><td class="accent">Business owners &amp; managers</td></tr>
+              <tr><td>Offer type</td><td>Digital course bundle</td><td class="accent">Done-with-you service</td></tr>
+              <tr><td>Entry price</td><td>&euro;497</td><td class="accent">&euro;500 Audit (with call)</td></tr>
+              <tr><td>CTA</td><td>Stripe checkout link</td><td class="accent">Book a discovery call</td></tr>
+              <tr><td>Follow-up</td><td>1 email, same night</td><td class="accent">5-email sequence over 5 days</td></tr>
+              <tr><td>Ad spend</td><td>&euro;62 (died 9 days early)</td><td class="accent">&euro;750&ndash;1,050 (continuous)</td></tr>
+              <tr><td>Social proof</td><td>None (founding cohort)</td><td class="accent">Pilot client results + live demos</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 5: FOLLOW-UP -->
+  <div class="section">
+    <div class="phase p5">
+      <div class="phase-head">
+        <span class="phase-tag">Post-Webinar</span>
+        <h2>The Follow-Up Machine</h2>
+      </div>
+      <div class="body">
+        <p>This is where August completely failed. Build this <em>before</em> the webinar, not after.</p>
+
+        <h4>5-Email Post-Webinar Sequence in Kit</h4>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Day</th><th>Email</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="num">Day 0</td><td>Replay + recap</td><td>Send recording within 2 hours. Recap the 3 demos. Include Audit booking link.</td></tr>
+              <tr><td class="num">Day 1</td><td>Case study</td><td>Detail one pilot client result: "How [Company] saved 12 hours/week." Booking link.</td></tr>
+              <tr><td class="num">Day 2</td><td>Objection handling</td><td>"Is AI automation right for my business?" Address top 3 objections. Booking link.</td></tr>
+              <tr><td class="num">Day 3</td><td>ROI calculator</td><td>"Here's exactly how much manual work costs you." Simple math: hours &times; rate = waste. Booking link.</td></tr>
+              <tr><td class="num">Day 4</td><td>Last call</td><td>"Founding pricing expires tonight at midnight." Final push. Booking link. After this, move to regular nurture.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Beyond Email</h4>
+        <ul class="checklist">
+          <li><strong>WhatsApp group</strong> for webinar attendees &mdash; share daily tips and answer questions for 5 days after.</li>
+          <li><strong>Personal DMs</strong> to anyone who clicked the booking link but didn't book. "Hey [name], saw you were interested in the Audit. Any questions I can answer?"</li>
+          <li><strong>Retargeting ads</strong> to webinar attendees who didn't book (Custom Audience from Kit registrants). Run for 7 days post-webinar with a testimonial creative.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- REVENUE MATH -->
+  <div class="section">
+    <h4>Revenue Math</h4>
+    <h2>What Success Looks Like</h2>
+    <p>Conservative targets for the first B2B webinar, assuming proper ad spend and follow-up:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Metric</th><th style="text-align:right">Conservative</th><th style="text-align:right">Realistic</th><th style="text-align:right">Ambitious</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>B2B leads from ads</td><td class="num">200</td><td class="num">350</td><td class="num">500</td></tr>
+          <tr><td>Webinar registrations</td><td class="num">80</td><td class="num">150</td><td class="num">250</td></tr>
+          <tr><td>Live attendees (40%)</td><td class="num">32</td><td class="num">60</td><td class="num">100</td></tr>
+          <tr><td>Audit calls booked (10%)</td><td class="num">3</td><td class="num">6</td><td class="num">10</td></tr>
+          <tr><td>Audits closed (60%)</td><td class="num">2</td><td class="num">4</td><td class="num">6</td></tr>
+          <tr><td>Sprints upsold (50%)</td><td class="num">1</td><td class="num">2</td><td class="num">3</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="math-grid">
+      <div class="math-box">
+        <div class="label">Conservative</div>
+        <div class="value">&euro;3,500</div>
+        <div class="note">2 Audits + 1 Sprint</div>
+      </div>
+      <div class="math-box">
+        <div class="label">Realistic</div>
+        <div class="value">&euro;7,000</div>
+        <div class="note">4 Audits + 2 Sprints</div>
+      </div>
+      <div class="math-box">
+        <div class="label">Ambitious</div>
+        <div class="value">&euro;12,000</div>
+        <div class="note">6 Audits + 3 Sprints</div>
+      </div>
+      <div class="math-box">
+        <div class="label">+ Monthly Retainers</div>
+        <div class="value">&euro;500&ndash;3,000</div>
+        <div class="note">Recurring from Sprint clients</div>
+      </div>
+    </div>
+
+    <p style="font-size: 14px; color: var(--text-muted);">Even the conservative scenario (&euro;3,500) is 3.5&times; the ad spend and 74&times; the August 27 revenue. The difference: right audience, right offer, right follow-up.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- BEFORE YOU LAUNCH CHECKLIST -->
+  <div class="section">
+    <h4>Pre-Launch Gate</h4>
+    <h2>Don't Launch Until These Are Done</h2>
+    <p>The August webinar had unchecked P0 items. This time, every box gets checked before ads go live:</p>
+    <ul class="checklist">
+      <li><strong>Lead magnet PDF/video is finished</strong> and the landing page converts on mobile</li>
+      <li><strong>Kit registration form is live</strong> with proper tagging (b2b-lead, webinar-business-sept)</li>
+      <li><strong>5-email post-webinar sequence is built</strong> and tested in Kit (draft mode, ready to activate)</li>
+      <li><strong>Calendly/booking page works end-to-end:</strong> book &rarr; confirmation email &rarr; calendar invite &rarr; reminder</li>
+      <li><strong>Stripe checkout links work</strong> for all 3 tiers (Audit, Sprint, Retainer) with EUR pricing</li>
+      <li><strong>Yago demo environment is stable</strong> &mdash; test all 3 demos the day before, not the morning of</li>
+      <li><strong>Ad campaigns are scheduled</strong> with end dates AFTER the webinar, not before</li>
+      <li><strong>Windsor.ai has GA4 + Stripe + Meta Ads connected</strong> so you can track the funnel</li>
+      <li><strong>Webinar recording setup tested</strong> &mdash; replay goes out within 2 hours, not days later</li>
+      <li><strong>At least 1 pilot client result ready</strong> to present as social proof during the webinar</li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>Plan built from data across ConvertKit, Meta Ads, Airtable, Notion, and Google Drive</p>
+    <p class="stamp">RemoteCoaches Council &middot; August 28, 2026</p>
+  </footer>
+
+</div>
