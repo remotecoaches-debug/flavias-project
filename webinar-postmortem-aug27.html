@@ -1,0 +1,981 @@
+<title>Webinar Sales Post-Mortem</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --bg: #f6f2ec;
+    --bg-card: #ffffff;
+    --bg-card-alt: #f0ebe3;
+    --text: #1e2330;
+    --text-muted: #5c6070;
+    --text-faint: #8a8d9a;
+    --accent: #c44b2b;
+    --accent-soft: #fdf0ec;
+    --blue: #3d6b8e;
+    --blue-soft: #eaf1f6;
+    --green: #3a7d54;
+    --green-soft: #edf6f0;
+    --amber: #b5850a;
+    --amber-soft: #fdf6e3;
+    --border: #ddd6cb;
+    --border-light: #e8e2d8;
+    --severity-critical: #c44b2b;
+    --severity-high: #d47a1e;
+    --severity-medium: #b5850a;
+    --mono-bg: #2a2f3d;
+    --mono-text: #e8e4df;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141821;
+      --bg-card: #1c2130;
+      --bg-card-alt: #222738;
+      --text: #e2ded8;
+      --text-muted: #9a9daa;
+      --text-faint: #6b6e7c;
+      --accent: #e06040;
+      --accent-soft: #2d1f1a;
+      --blue: #6a9fc4;
+      --blue-soft: #1a2530;
+      --green: #5aad74;
+      --green-soft: #1a2a1f;
+      --amber: #d4a832;
+      --amber-soft: #2a2518;
+      --border: #2e3344;
+      --border-light: #262b3a;
+      --severity-critical: #e06040;
+      --severity-high: #e89840;
+      --severity-medium: #d4a832;
+      --mono-bg: #0f1319;
+      --mono-text: #c8c4be;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #141821;
+    --bg-card: #1c2130;
+    --bg-card-alt: #222738;
+    --text: #e2ded8;
+    --text-muted: #9a9daa;
+    --text-faint: #6b6e7c;
+    --accent: #e06040;
+    --accent-soft: #2d1f1a;
+    --blue: #6a9fc4;
+    --blue-soft: #1a2530;
+    --green: #5aad74;
+    --green-soft: #1a2a1f;
+    --amber: #d4a832;
+    --amber-soft: #2a2518;
+    --border: #2e3344;
+    --border-light: #262b3a;
+    --severity-critical: #e06040;
+    --severity-high: #e89840;
+    --severity-medium: #d4a832;
+    --mono-bg: #0f1319;
+    --mono-text: #c8c4be;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrapper {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* HEADER */
+  .report-header {
+    text-align: center;
+    padding: 48px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+
+  .report-header .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .report-header h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 900;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 12px;
+    text-wrap: balance;
+    font-optical-sizing: auto;
+  }
+
+  .report-header .subtitle {
+    color: var(--text-muted);
+    font-size: 16px;
+    margin-bottom: 28px;
+  }
+
+  /* METRIC STRIP */
+  .metric-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .metric-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .metric-box .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 6px;
+  }
+
+  .metric-box .value {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text);
+  }
+
+  .metric-box .value.critical { color: var(--severity-critical); }
+  .metric-box .value.amber { color: var(--amber); }
+  .metric-box .value.blue { color: var(--blue); }
+
+  .metric-box .context {
+    font-size: 12px;
+    color: var(--text-faint);
+    margin-top: 4px;
+  }
+
+  /* SECTIONS */
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text);
+    margin-bottom: 16px;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  p { margin-bottom: 14px; max-width: 65ch; }
+  p.wide { max-width: none; }
+
+  strong { font-weight: 600; }
+
+  /* VERDICT */
+  .verdict {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 24px 28px;
+    margin-bottom: 32px;
+  }
+
+  .verdict p {
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 0;
+    max-width: none;
+  }
+
+  .verdict strong { color: var(--accent); }
+
+  /* FINDING CARDS */
+  .finding {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .finding::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+  }
+
+  .finding.critical::before { background: var(--severity-critical); }
+  .finding.high::before { background: var(--severity-high); }
+  .finding.medium::before { background: var(--severity-medium); }
+
+  .finding .finding-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .severity-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    line-height: 1;
+  }
+
+  .severity-badge.critical { background: var(--accent-soft); color: var(--severity-critical); }
+  .severity-badge.high { background: var(--amber-soft); color: var(--severity-high); }
+  .severity-badge.medium { background: var(--amber-soft); color: var(--severity-medium); }
+
+  .finding h3 { margin-bottom: 0; }
+
+  .finding p {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 0;
+    max-width: none;
+  }
+
+  .finding .evidence {
+    margin-top: 12px;
+    background: var(--mono-bg);
+    color: var(--mono-text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    padding: 14px 16px;
+    border-radius: 6px;
+    overflow-x: auto;
+  }
+
+  /* TABLES */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0 24px;
+    border-radius: 10px;
+    border: 1px solid var(--border-light);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  thead { background: var(--bg-card-alt); }
+
+  th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    padding: 12px 14px;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 10px 14px;
+    border-top: 1px solid var(--border-light);
+    color: var(--text-muted);
+  }
+
+  tr:hover td { background: var(--bg-card-alt); }
+
+  td.num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    text-align: right;
+    font-weight: 500;
+  }
+
+  td.bad { color: var(--severity-critical); font-weight: 600; }
+  td.warn { color: var(--severity-medium); font-weight: 600; }
+
+  /* FUNNEL VIZ */
+  .funnel {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 20px 0 28px;
+  }
+
+  .funnel-step {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .funnel-bar-wrap {
+    flex: 1;
+    position: relative;
+  }
+
+  .funnel-bar {
+    height: 36px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    min-width: 60px;
+    transition: width 0.4s ease;
+  }
+
+  .funnel-label {
+    font-size: 12px;
+    color: var(--text-faint);
+    width: 110px;
+    flex-shrink: 0;
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+  }
+
+  .funnel-drop {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--severity-critical);
+    width: 60px;
+    flex-shrink: 0;
+    text-align: right;
+    font-weight: 600;
+  }
+
+  /* TIMELINE */
+  .timeline {
+    position: relative;
+    padding-left: 24px;
+    margin: 20px 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 4px;
+    bottom: 4px;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .tl-item {
+    position: relative;
+    margin-bottom: 20px;
+    padding-left: 8px;
+  }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -21px;
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+    border: 2px solid var(--bg);
+  }
+
+  .tl-item.active::before { background: var(--accent); }
+  .tl-item.dead::before { background: var(--severity-critical); }
+
+  .tl-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-faint);
+    font-weight: 600;
+  }
+
+  .tl-content {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .tl-content strong { color: var(--text); }
+
+  /* RECOMMENDATION CARDS */
+  .rec {
+    background: var(--green-soft);
+    border: 1px solid var(--green);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+  }
+
+  .rec h3 { color: var(--green); font-size: 15px; }
+
+  .rec p {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 0;
+    max-width: none;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 48px 0;
+  }
+
+  /* FOOTER */
+  .report-footer {
+    text-align: center;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    color: var(--text-faint);
+    font-size: 12px;
+  }
+
+  .report-footer .stamp {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 600px) {
+    .wrapper { padding: 24px 16px 60px; }
+    .metric-strip { grid-template-columns: 1fr 1fr; }
+    .funnel-label { width: 80px; font-size: 10px; }
+    .funnel-drop { width: 45px; font-size: 10px; }
+    .finding { padding: 18px; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+
+<div class="wrapper">
+
+  <header class="report-header">
+    <div class="eyebrow">Council Post-Mortem &middot; 28 August 2026</div>
+    <h1>Why the Webinar Didn't Sell</h1>
+    <div class="subtitle">Full-stack analysis of the August 27 webinar across 6 data sources</div>
+  </header>
+
+  <!-- KEY METRICS -->
+  <div class="metric-strip">
+    <div class="metric-box">
+      <div class="label">Revenue</div>
+      <div class="value critical">&euro;47</div>
+      <div class="context">Target: &euro;5,976&ndash;14,446</div>
+    </div>
+    <div class="metric-box">
+      <div class="label">Live Attendees</div>
+      <div class="value critical">32</div>
+      <div class="context">982 invited &middot; 3.3% show rate</div>
+    </div>
+    <div class="metric-box">
+      <div class="label">Sales Clicks</div>
+      <div class="value critical">2</div>
+      <div class="context">504 recipients on pitch email</div>
+    </div>
+    <div class="metric-box">
+      <div class="label">Ad Spend</div>
+      <div class="value amber">&euro;62</div>
+      <div class="context">Ads died Aug 18 &middot; 9 days early</div>
+    </div>
+    <div class="metric-box">
+      <div class="label">Offers Shown</div>
+      <div class="value amber">18+</div>
+      <div class="context">Different products/prices to same audience</div>
+    </div>
+    <div class="metric-box">
+      <div class="label">Price Jump</div>
+      <div class="value blue">10&ndash;30&times;</div>
+      <div class="context">&euro;50 ticket &rarr; &euro;497&ndash;1,497 pitch</div>
+    </div>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="section">
+    <div class="section-label">The Verdict</div>
+    <h2>This wasn't one problem. The funnel broke at every stage.</h2>
+    <div class="verdict">
+      <p>The webinar failed because of <strong>compounding breakdowns</strong> across the entire funnel: ads stopped running 9 days before the event, the email invitation to non-buyers got 3 clicks out of 979, only 32 of 982 invited people showed up live, and the pitch asked a &euro;50 audience to spend &euro;497&ndash;1,497 on products that didn't fully exist yet. This is the same pattern as August 4 (350 attendees, 10 sales) &mdash; but with far fewer attendees reaching the room.</p>
+    </div>
+  </div>
+
+  <!-- FUNNEL VISUALIZATION -->
+  <div class="section">
+    <div class="section-label">The Funnel</div>
+    <h2>Where Every Drop-off Happened</h2>
+
+    <div class="funnel">
+      <div class="funnel-step">
+        <div class="funnel-label">Email list</div>
+        <div class="funnel-bar-wrap">
+          <div class="funnel-bar" style="width: 100%; background: var(--blue);">1,195</div>
+        </div>
+        <div class="funnel-drop"></div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-label">Invited</div>
+        <div class="funnel-bar-wrap">
+          <div class="funnel-bar" style="width: 82%; background: var(--blue);">982</div>
+        </div>
+        <div class="funnel-drop">&minus;18%</div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-label">Ad reach</div>
+        <div class="funnel-bar-wrap">
+          <div class="funnel-bar" style="width: 32%; background: var(--amber);">3,869</div>
+        </div>
+        <div class="funnel-drop">died Aug 18</div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-label">Clicked invite</div>
+        <div class="funnel-bar-wrap">
+          <div class="funnel-bar" style="width: 8%; background: var(--severity-high);">~90</div>
+        </div>
+        <div class="funnel-drop">&minus;91%</div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-label">Attended live</div>
+        <div class="funnel-bar-wrap">
+          <div class="funnel-bar" style="width: 2.7%; background: var(--severity-critical);">32</div>
+        </div>
+        <div class="funnel-drop">&minus;64%</div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-label">Clicked offer</div>
+        <div class="funnel-bar-wrap">
+          <div class="funnel-bar" style="width: 0.5%; background: var(--severity-critical); min-width: 45px;">2</div>
+        </div>
+        <div class="funnel-drop">&minus;94%</div>
+      </div>
+      <div class="funnel-step">
+        <div class="funnel-label">Purchased</div>
+        <div class="funnel-bar-wrap">
+          <div class="funnel-bar" style="width: 0.3%; background: var(--severity-critical); min-width: 45px;">1</div>
+        </div>
+        <div class="funnel-drop">&minus;50%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ROOT CAUSES -->
+  <div class="section">
+    <div class="section-label">Root Cause Analysis</div>
+    <h2>The Seven Breaks</h2>
+
+    <div class="finding critical">
+      <div class="finding-header">
+        <span class="severity-badge critical">Critical</span>
+        <h3>Ads stopped running 9 days before the webinar</h3>
+      </div>
+      <p>The main campaign spent meaningfully only Aug 15&ndash;18, then dropped to near-zero. On webinar day, only RON 2.47 was spent (83 impressions, zero clicks). The traffic campaign ("META_Traffic_RO_Webinar_27aug") never delivered a single impression &mdash; &euro;0 total spend. Total ad investment was ~&euro;62 for a launch targeting &euro;6,000+ in revenue.</p>
+      <div class="evidence">
+Aug 15  RON 103   &middot;  2,815 impr  &middot;  42 clicks<br>
+Aug 16  RON  58   &middot;  1,579 impr  &middot;  18 clicks<br>
+Aug 17  RON  53   &middot;  1,906 impr  &middot;  12 clicks<br>
+Aug 18  RON  86   &middot;  2,613 impr  &middot;  18 clicks<br>
+Aug 19  RON   1   &middot;     38 impr  &middot;   0 clicks<br>
+Aug 20&ndash;26          &mdash; ZERO DELIVERY &mdash;<br>
+Aug 27  RON   2   &middot;     83 impr  &middot;   0 clicks  &larr; WEBINAR DAY
+      </div>
+    </div>
+
+    <div class="finding critical">
+      <div class="finding-header">
+        <span class="severity-badge critical">Critical</span>
+        <h3>10&ndash;30&times; price jump with no trust bridge</h3>
+      </div>
+      <p>The audience's highest price point was &euro;50 (AI course). The webinar pitched &euro;497 / &euro;997 / &euro;1,497 packages &mdash; products that didn't fully exist yet ("founding cohort" of 12 AI systems, video walkthroughs, live sessions). No testimonials, case studies, or proof of results existed for these offers. Only the &euro;47 Challenge had a price the audience recognized, and it got exactly 1 click.</p>
+      <div class="evidence">
+Sales email link clicks (504 recipients):<br>
+  START &euro;497  &rarr;  1 click<br>
+  PRO   &euro;997  &rarr;  0 clicks<br>
+  VIP &euro;1,497  &rarr;  0 clicks<br>
+  Challenge &euro;47 &rarr;  1 click  &rarr;  1 purchase
+      </div>
+    </div>
+
+    <div class="finding critical">
+      <div class="finding-header">
+        <span class="severity-badge critical">Critical</span>
+        <h3>18+ offer variants have exhausted the audience</h3>
+      </div>
+      <p>Your own September Growth Reset doc diagnosed this: "The buyer doesn't know what to choose first." The same audience has seen: &euro;24 kit, &euro;39 package, &euro;47 challenge, &euro;50/87/97/125/147 AI courses, &euro;27/57/97 communities, &euro;59 English AI, &euro;150 sessions, &euro;250 Done-for-You, plus B2B offers. Price changed faster than perceived value. The result is decision paralysis and eroded trust.</p>
+    </div>
+
+    <div class="finding critical">
+      <div class="finding-header">
+        <span class="severity-badge critical">Critical</span>
+        <h3>Only 32 people attended live</h3>
+      </div>
+      <p>Of 982 subscribers tagged for the webinar invitation, only 32 showed up. The main invitation email to non-buyers (979 people, Aug 18) got a 0.31% click rate &mdash; 3 clicks total. By comparison, the Aug 4 webinar had 350 attendees. Registration was through Zoom only, so there's no Kit data on who even registered vs. who was just emailed.</p>
+    </div>
+
+    <div class="finding high">
+      <div class="finding-header">
+        <span class="severity-badge high">High</span>
+        <h3>Confusing promotion: paid &rarr; free &rarr; upsell</h3>
+      </div>
+      <p>The 8 promotional scripts (Aug 12) sold the webinar as a &euro;50 paid event: "50 EUR, with both AI courses included." But the Aug 27 morning email called it "webinar live gratuit" (free). Then during the webinar, attendees were pitched &euro;497&ndash;1,497 packages. This triple pivot &mdash; paid to free to upsell &mdash; confuses the value proposition at every stage.</p>
+    </div>
+
+    <div class="finding high">
+      <div class="finding-header">
+        <span class="severity-badge high">High</span>
+        <h3>No post-webinar follow-up sequence</h3>
+      </div>
+      <p>The only follow-up was one sales email and a WhatsApp invitation, both sent the same evening. There is no replay email, no objection-handling sequence, no deadline reminder for the 48-hour founder pricing. Most webinar sales happen in the 24&ndash;72 hour follow-up window, which was completely missed.</p>
+    </div>
+
+    <div class="finding medium">
+      <div class="finding-header">
+        <span class="severity-badge medium">Medium</span>
+        <h3>Two competing business models on the same audience</h3>
+      </div>
+      <p>The B2C creator funnel (courses, challenges, communities for job seekers) and the B2B Yago Automations service (&euro;1,500&ndash;5,000 implementations for recruitment agencies) run in parallel on the same channels. The "START HERE" doc in Notion says "ignore every other package" and focus on B2B for 30 days &mdash; but the webinar went ahead anyway.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- EMAIL PERFORMANCE -->
+  <div class="section">
+    <div class="section-label">Email Performance</div>
+    <h2>The Email Sequence, Step by Step</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Subject</th>
+            <th style="text-align:right">Sent</th>
+            <th style="text-align:right">Open %</th>
+            <th style="text-align:right">Click %</th>
+            <th style="text-align:right">Clicks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Aug 13</td>
+            <td>Invitatie Webinar AI (buyers)</td>
+            <td class="num">216</td>
+            <td class="num">70.4%</td>
+            <td class="num">13.4%</td>
+            <td class="num">30</td>
+          </tr>
+          <tr>
+            <td>Aug 18</td>
+            <td>Ti-ai facut o afacere... (non-buyers)</td>
+            <td class="num">979</td>
+            <td class="num">37.2%</td>
+            <td class="num bad">0.31%</td>
+            <td class="num bad">3</td>
+          </tr>
+          <tr>
+            <td>Aug 24</td>
+            <td>Nu am mai scris nimic (re-engagement)</td>
+            <td class="num">1,179</td>
+            <td class="num">40.2%</td>
+            <td class="num">1.7%</td>
+            <td class="num">20</td>
+          </tr>
+          <tr>
+            <td>Aug 25</td>
+            <td>Invitatie Webinar AI (buyers)</td>
+            <td class="num">213</td>
+            <td class="num">48.4%</td>
+            <td class="num">7.5%</td>
+            <td class="num">23</td>
+          </tr>
+          <tr>
+            <td>Aug 27 AM</td>
+            <td>Webinar live gratuit, ora 19:00</td>
+            <td class="num">992</td>
+            <td class="num">31.8%</td>
+            <td class="num">1.9%</td>
+            <td class="num">30</td>
+          </tr>
+          <tr>
+            <td>Aug 27 PM</td>
+            <td>Suntem live!</td>
+            <td class="num">1,204</td>
+            <td class="num">31.0%</td>
+            <td class="num">2.2%</td>
+            <td class="num">27</td>
+          </tr>
+          <tr>
+            <td>Aug 27 PM</td>
+            <td>Te astept pe WhatsApp!</td>
+            <td class="num">987</td>
+            <td class="num">25.5%</td>
+            <td class="num">3.6%</td>
+            <td class="num">35</td>
+          </tr>
+          <tr style="background: var(--accent-soft);">
+            <td><strong>Aug 27 PM</strong></td>
+            <td><strong>S-au ocupat primele 3 locuri la VIP</strong></td>
+            <td class="num"><strong>504</strong></td>
+            <td class="num"><strong>26.0%</strong></td>
+            <td class="num bad"><strong>0.4%</strong></td>
+            <td class="num bad"><strong>2</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The critical failure point: the sales email. Sent to 504 people, 131 opened it, but only 2 clicked any sales link. The offer simply did not resonate with this audience at these prices.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- AD TIMELINE -->
+  <div class="section">
+    <div class="section-label">Ad Delivery Timeline</div>
+    <h2>The Promotion Window That Vanished</h2>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-date">Aug 1&ndash;4</div>
+        <div class="tl-content"><strong>Boosted post</strong> performed well: RON 179 spend, 15,997 reach, 2,786 clicks (15.16% CTR). But this teaser ended 23 days before the webinar.</div>
+      </div>
+      <div class="tl-item active">
+        <div class="tl-date">Aug 15&ndash;18</div>
+        <div class="tl-content"><strong>Main campaign live:</strong> RON 300 spent across 4 days, 3,869 reach, 231 clicks, 57 landing page views. The only period with meaningful ad delivery.</div>
+      </div>
+      <div class="tl-item dead">
+        <div class="tl-date">Aug 19&ndash;26</div>
+        <div class="tl-content"><strong>Ads stopped delivering.</strong> 8 consecutive days of &euro;0 spend. The entire final week of promotion was dead silence from paid channels.</div>
+      </div>
+      <div class="tl-item dead">
+        <div class="tl-date">Aug 27 (Webinar Day)</div>
+        <div class="tl-content"><strong>RON 2.47 spent.</strong> 83 impressions, zero clicks. The traffic campaign never ran at all (&euro;0 lifetime spend).</div>
+      </div>
+    </div>
+
+    <p>The "Flavia Popescu" ad account is also <strong>disabled</strong> ("flagged because of unusual activity, all ads have been paused"). If this was ever intended as a secondary promotion channel, it was unavailable.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PRICING HISTORY -->
+  <div class="section">
+    <div class="section-label">Offer Archaeology</div>
+    <h2>What This Audience Has Been Shown</h2>
+    <p>Data assembled from Airtable offer stack, Notion strategy docs, Google Drive files, and ConvertKit products. The same ~1,200 subscribers have seen all of these:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th style="text-align:right">Price(s)</th>
+            <th>Channel</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>AI Kit</td><td class="num">&euro;24</td><td>Beacons</td><td>Still visible</td></tr>
+          <tr><td>CV + LinkedIn Package</td><td class="num">&euro;39</td><td>Beacons</td><td>Still visible</td></tr>
+          <tr><td>5-Day Challenge</td><td class="num">&euro;47&ndash;175</td><td>Beacons / Stripe</td><td>Multiple price points used</td></tr>
+          <tr><td>AI Course</td><td class="num">&euro;50&ndash;147</td><td>Kit Commerce</td><td>4 total purchases at &euro;50</td></tr>
+          <tr><td>English AI Course</td><td class="num">&euro;59</td><td>Beacons</td><td>Still visible</td></tr>
+          <tr><td>AI Operator Course</td><td class="num">&euro;50</td><td>cariere-remote.ro</td><td>Needs redirect</td></tr>
+          <tr><td>Community</td><td class="num">&euro;27&ndash;97/mo</td><td>Multiple</td><td>3+ price points used</td></tr>
+          <tr><td>Career Diagnostic</td><td class="num">&euro;150</td><td>Direct</td><td>Active</td></tr>
+          <tr><td>Done for You</td><td class="num">&euro;250</td><td>Direct</td><td>Active</td></tr>
+          <tr style="background: var(--accent-soft);">
+            <td><strong>Webinar Offer (Aug 27)</strong></td>
+            <td class="num bad"><strong>&euro;497&ndash;1,497</strong></td>
+            <td><strong>Stripe</strong></td>
+            <td><strong>0 sales</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- WHAT WAS MISSING -->
+  <div class="section">
+    <div class="section-label">Infrastructure Gaps</div>
+    <h2>What Wasn't Set Up</h2>
+
+    <div class="finding medium">
+      <div class="finding-header">
+        <span class="severity-badge medium">Gap</span>
+        <h3>No webinar registration form in Kit</h3>
+      </div>
+      <p>Registration was Zoom-only, so there's no data on who registered vs. who just received emails. Impossible to measure registration &rarr; attendance conversion or send targeted reminders.</p>
+    </div>
+
+    <div class="finding medium">
+      <div class="finding-header">
+        <span class="severity-badge medium">Gap</span>
+        <h3>No analytics infrastructure</h3>
+      </div>
+      <p>Windsor.ai has zero connectors set up. No GA4, no Stripe, no Meta Ads data flowing to any analytics dashboard. Landing page performance, conversion rates, and drop-off points are invisible.</p>
+    </div>
+
+    <div class="finding medium">
+      <div class="finding-header">
+        <span class="severity-badge medium">Gap</span>
+        <h3>Sales tracked nowhere centrally</h3>
+      </div>
+      <p>Kit Commerce only knows about 4 total &euro;50 purchases. The &euro;497&ndash;1,497 offers go through Stripe. The &euro;47 challenge goes through Beacons. Airtable has targets but no actuals. No single source of truth for revenue.</p>
+    </div>
+
+    <div class="finding medium">
+      <div class="finding-header">
+        <span class="severity-badge medium">Gap</span>
+        <h3>P0 checklist items left unchecked</h3>
+      </div>
+      <p>The September Growth Reset listed critical pre-webinar tasks that weren't completed: yAGO Pro activation, removing old conflicting prices from Beacons, completing Terms/Privacy for yAGO, and testing the full purchase flow end-to-end.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- COUNCIL RECOMMENDATIONS -->
+  <div class="section">
+    <div class="section-label">The Council's Recommendations</div>
+    <h2>What to Do Next</h2>
+
+    <div class="rec">
+      <h3>1. Stop launching and simplify the offer</h3>
+      <p>Your own Growth Reset doc has the right diagnosis. Kill every product except one clear ladder: <strong>Lead Magnet (free) &rarr; 5-Day Challenge (&euro;47) &rarr; AI Course (&euro;147)</strong>. Remove the &euro;24 kit, &euro;39 package, &euro;59 English course, and &euro;50 AI Operator page from Beacons today. One offer, one price, one CTA. The audience needs 90 days of consistency before a higher-ticket launch.</p>
+    </div>
+
+    <div class="rec">
+      <h3>2. Don't attempt &euro;497+ until you have proof</h3>
+      <p>A &euro;50 audience will not jump to &euro;497 without social proof, case studies, and a trust bridge. Build the bridge: run 3&ndash;5 cohorts of the &euro;47 Challenge, collect testimonials and results, then create a natural upgrade path. The "founding cohort" model requires either a large warm audience or a personal-selling approach (DMs, calls), not a webinar blast.</p>
+    </div>
+
+    <div class="rec">
+      <h3>3. Fix the ads before the next launch</h3>
+      <p>Investigate why the campaign stopped delivering after Aug 18 (budget exhaustion? audience saturation? disapproved ads?). The "Flavia Popescu" ad account needs to be reinstated. For the next event: set a promotion period of 14+ days with consistent daily budget, test creatives in the first 3 days, and don't let the ads go dark in the final week.</p>
+    </div>
+
+    <div class="rec">
+      <h3>4. Build a real follow-up sequence</h3>
+      <p>Create a 5&ndash;7 email post-webinar sequence in Kit: replay link (Day 1), case study/testimonial (Day 2), objection handling (Day 3), deadline reminder (Day 4), final call (Day 5). Most webinar revenue comes from follow-up, not the live pitch. The single same-night email left 95% of potential recovery on the table.</p>
+    </div>
+
+    <div class="rec">
+      <h3>5. Set up tracking infrastructure</h3>
+      <p>Connect Stripe, Meta Ads, and GA4 to Windsor.ai (or a simple Google Sheet via Zapier). Create a Kit registration form for every event so you can track registrations &rarr; attendance &rarr; sales. You cannot improve what you cannot measure.</p>
+    </div>
+
+    <div class="rec">
+      <h3>6. Pick one business model for the next 90 days</h3>
+      <p>B2C creator (courses/challenges to job seekers) and B2B service (Yago automation for agencies) are different businesses with different audiences. Running both dilutes both. The Notion "START HERE" doc recommends B2B for 30 days &mdash; either commit to that or commit to the simplified B2C ladder. Don't split energy.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- COMPARISON -->
+  <div class="section">
+    <div class="section-label">Pattern Recognition</div>
+    <h2>Aug 4 vs Aug 27: Same Pattern, Worse Numbers</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th style="text-align:right">Aug 4 Webinar</th>
+            <th style="text-align:right">Aug 27 Webinar</th>
+            <th style="text-align:right">Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Live attendees</td>
+            <td class="num">350</td>
+            <td class="num bad">32</td>
+            <td class="num bad">&minus;91%</td>
+          </tr>
+          <tr>
+            <td>Purchases</td>
+            <td class="num">10</td>
+            <td class="num bad">1</td>
+            <td class="num bad">&minus;90%</td>
+          </tr>
+          <tr>
+            <td>Offer structure</td>
+            <td class="num">5 products, 5 prices</td>
+            <td class="num warn">3 tiers, &euro;497&ndash;1,497</td>
+            <td class="num">&mdash;</td>
+          </tr>
+          <tr>
+            <td>Core problem</td>
+            <td>"Menu of offers"</td>
+            <td>Price too high, no proof</td>
+            <td class="num">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The Aug 27 webinar simplified the offer structure (good) but overcorrected by jumping to premium pricing without audience readiness. And with 91% fewer attendees, even a perfect pitch would have produced minimal revenue.</p>
+  </div>
+
+  <footer class="report-footer">
+    <p>Data pulled from ConvertKit, Meta Ads, Airtable, Notion, Google Drive, and Windsor.ai</p>
+    <p class="stamp">Analysis compiled Aug 28, 2026 &middot; RemoteCoaches Council</p>
+  </footer>
+
+</div>
