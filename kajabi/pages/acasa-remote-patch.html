@@ -1,0 +1,31 @@
+<style>
+.fc .rc-prog{background:var(--pink);border-radius:40px;padding:clamp(28px,4vw,56px);max-width:1140px;margin-inline:auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:start}
+.fc .rc-prog ul{margin:0;padding-left:1.2rem;display:grid;gap:.45rem}
+.fc .rc-prog .g{background:var(--white);border-radius:18px;padding:1rem 1.2rem}
+.fc .rc-prog .txt{display:grid;gap:1rem;justify-items:start}
+@media (max-width:900px){.fc .rc-prog{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+ var fc=document.getElementById('fc'); if(!fc) return;
+ var ann=fc.querySelector('.fc-ann-track');
+ if(ann){var a='Job remote international, din Romania',b='Program nou: Job Remote in 90 de zile, cu garantie',h='';for(var i=0;i<4;i++){h+='<span>'+a+'</span><span>'+b+'</span>';}ann.innerHTML=h;}
+ var tg=fc.querySelector('.fc-hero-copy .tagline'); if(tg) tg.innerHTML='Job remote international, <em>fara sa pleci din Romania.</em>';
+ var ld=fc.querySelector('.fc-hero-copy .lede'); if(ld) ld.textContent='Am lucrat 6 ani in companii remote internationale precum Deel, Remote si Papaya Global. Stiu ce cauta un recrutor si iti arat exact ce sa schimbi la CV, LinkedIn si interviu, ca sa ajungi la un salariu international.';
+ var cr=fc.querySelector('.fc-hero-copy .cta-row'); if(cr) cr.innerHTML='<a class="btn" href="#program-90">Job Remote in 90 de zile</a><a class="btn ghost" href="#section-fl-jobs">Toate optiunile</a>';
+ var t1=fc.querySelector('.fc-tag.t1'); if(t1) t1.textContent='Joburi remote internationale';
+ var t3=fc.querySelector('.fc-tag.t3'); if(t3) t3.textContent='CV si interviu cu AI';
+ function card(href,html){var a=fc.querySelector('a[href*="'+href+'"]'); if(!a) return; var c=a.closest('article'); if(c) c.innerHTML=html;}
+ card('htZ2y4U9','<p class="label">Primul pas · 7 zile</p><h3>Kitul <em>Job Remote</em></h3><p>100 de companii remote-first, template de CV ATS, checklist LinkedIn in 15 pasi, 10 mesaje catre recrutori si planul de 7 zile.</p><p class="price">27 €</p><a class="btn" href="https://www.flaviapopescu.eu/offers/3DKRXN3L/checkout">Vreau kitul</a>');
+ card('z2uCEuKA','<p class="label">Sesiune · 45 minute</p><h3>Sesiune de <em>strategie</em></h3><p>Analizam CV-ul si LinkedIn-ul inainte de apel. Pleci cu 3 pasi clari. Cei 97 € se scad din orice pachet de peste 350 €, in 7 zile.</p><p class="price">97 €</p><a class="btn" href="https://www.flaviapopescu.eu/offers/dnWSMKFM/checkout">Rezerv sesiunea</a>');
+ var paths=document.getElementById('section-fl-paths');
+ if(paths && !document.getElementById('program-90')){
+  var s=document.createElement('section'); s.className='sec wrap'; s.id='program-90';
+  s.innerHTML='<div class="sec-head"><p class="label">Programul complet</p><h2>Job Remote in <em>90 de zile</em></h2><p>Pentru cine vrea rezultatul, nu doar informatia.</p></div><div class="rc-prog"><div class="txt"><p>Noi iti scriem CV-ul si LinkedIn-ul. Yago, asistentul nostru cu AI, te ajuta la fiecare aplicatie si te pregateste de interviu. Tu aplici dupa plan.</p><ul><li>CV &amp; LinkedIn Done for you, optimizate ATS <b>(375 €)</b></li><li>Challenge-ul de 5 zile <b>(97 €)</b></li><li>Yago 90 de zile: CV Lab, evaluator LinkedIn, interviu cu AI</li><li>Cele 2 cursuri de AI <b>(175 €)</b></li><li>2 sesiuni video: start si simulare de interviu <b>(194 €)</b></li><li>Feedback pe WhatsApp 90 de zile <b>(300 €)</b></li></ul></div><div class="txt"><figure class="fc-q" style="width:auto;margin:0"><blockquote>Am fost personal la 5 manageri de la 5 companii, iar la 3 dintre ei am obtinut interviul. Si am fost acceptat. Toti mi-au spus ca au fost atrasi de primele 3 fraze din CV.</blockquote><figcaption>Mesaj real</figcaption></figure><p><s style="opacity:.6">Valoare: peste 1.140 €</s></p><p class="price">1.497 €</p><p class="rate">sau 3 rate lunare de 549 €</p><p class="g"><b>Garantie:</b> daca aplici dupa plan si nu primesti niciun interviu in 90 de zile, lucram cu tine gratuit pana primesti.</p><div class="cta-row"><a class="btn" href="https://www.flaviapopescu.eu/offers/uCPjjNDW/checkout">Vreau programul</a><a class="btn ghost" href="https://www.flaviapopescu.eu/offers/hLQzpKNj/checkout">In 3 rate</a></div></div></div>';
+  paths.parentNode.insertBefore(s,paths);
+ }
+ var of=document.getElementById('oferta');
+ if(of){var cd=of.querySelector('.cards1'); var hd=of.querySelector('.sec-head h2'); if(hd) hd.innerHTML='Motorul de Reels e <em>deschis</em>'; if(cd) cd.innerHTML='<article class="card pink"><p class="label">Curs · Platesti o singura data</p><h3>Motorul de <em>Reels</em></h3><p>Motorul, cursul si toate actualizarile. Merge in Claude, Codex sau ChatGPT.</p><p class="price">127 €</p><a class="btn" href="https://www.flaviapopescu.eu/offers/oVEQCkep/checkout">Vreau Motorul de Reels</a></article>';}
+ fc.querySelectorAll('a[href="#oferta"]').forEach(function(a){if(/list/i.test(a.textContent)) a.textContent='Vezi Motorul de Reels';});
+})();
+</script>

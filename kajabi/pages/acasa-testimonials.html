@@ -1,0 +1,32 @@
+<style>
+/* Testimonials: two marquee rows of real messages, opposite directions, pause on hover */
+.fc-love{background:var(--cream);padding-block:clamp(72px,9vw,120px);overflow:hidden}
+.fc-love .sec-head{padding-inline:16px}
+.fc-love-row{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.fc-love-row+.fc-love-row{margin-top:18px}
+.fc-love-track{display:flex;gap:18px;width:max-content;padding-block:10px;animation:fc-slide 70s linear infinite}
+.fc-love-row.rev .fc-love-track{animation-direction:reverse;animation-duration:80s}
+.fc-love-row:hover .fc-love-track,.fc-love-row:focus-within .fc-love-track{animation-play-state:paused}
+.fc-q{flex:none;width:clamp(260px,26vw,360px);background:var(--white);border-radius:28px;padding:28px 28px 24px;display:grid;gap:14px;align-content:space-between;box-shadow:0 10px 26px rgba(114,8,8,.06);margin:0}
+.fc-q:nth-child(3n+2){background:var(--pink)}
+.fc-q:nth-child(3n){background:var(--sky)}
+.fc-q blockquote{border:0!important;padding:0!important;background:none!important;margin:0;font-family:var(--serif);font-style:italic;font-weight:500;font-size:1.12rem;line-height:1.5;color:var(--ink)}
+.fc-q blockquote::before{content:"\201E";display:block;font-family:var(--serif);font-style:normal;font-size:3rem;line-height:.6;color:var(--crimson);margin-bottom:.35rem}
+.fc-q figcaption{font-family:var(--label);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--crimson)}
+.fc-love-note{text-align:center;margin-top:clamp(28px,4vw,40px);font-family:var(--label);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft)}
+@media (prefers-reduced-motion:reduce){.fc-love-row{overflow-x:auto;-webkit-mask-image:none;mask-image:none}.fc-love-track{animation:none!important}.fc-love-track [aria-hidden="true"]{display:none}}
+</style>
+<script>
+(function(){
+ if(document.getElementById('feedback')) return;
+ var ch=document.getElementById('challenge'); if(!ch) return;
+ var t=document.createElement('template'); t.innerHTML=`<section class="fc-love" id="feedback">
+  <div class="sec-head"><p class="label">Mesaje reale</p><h2>Ce îmi scriu <em>oamenii</em></h2><p>De la oameni care au trecut prin Challenge, prin cursul AI sau prin CV-ul refăcut cu noi.</p></div>
+  <div class="fc-love-row"><div class="fc-love-track"><figure class="fc-q"><blockquote>Am urmat exact acei trei pași. Am fost personal la 5 manageri de la 5 companii, iar la 3 dintre ei am obținut interviul. Și am fost acceptat. Toți mi-au spus că au fost atrași de primele 3 fraze.</blockquote><figcaption>Video despre CV</figcaption></figure><figure class="fc-q"><blockquote>Nu pot să cred, am terminat challenge-ul ieri. Aplic de peste 6 luni și nu am avut niciun interviu. Ieri am aplicat la 3 joburi și deja am primit un interviu.</blockquote><figcaption>5-Day Challenge</figcaption></figure><figure class="fc-q"><blockquote>După ce mi-ai făcut CV-ul, am primit invitație la 3 interviuri în nici 2 săptămâni. Înainte aplicasem fără succes mai bine de un an.</blockquote><figcaption>CV &amp; LinkedIn</figcaption></figure><figure class="fc-q"><blockquote>Am terminat cursul AI, este absolut GENIAL! Explică absolut tot pas cu pas.</blockquote><figcaption>Cursul AI</figcaption></figure><figure class="fc-q"><blockquote>Am reușit să îmi găsesc ceva remote în mai puțin de 2 luni. Fără 5 Day Challenge nu aș fi reușit.</blockquote><figcaption>5-Day Challenge</figcaption></figure><figure class="fc-q"><blockquote>Din ianuarie încep un nou job. Doar cu o zi la birou și cu 60% mai mult la salariu.</blockquote><figcaption>Clientă</figcaption></figure><figure class="fc-q"><blockquote>În 30 de minute am găsit o grămadă de joburi specifice profilului meu. Mi-a făcut și analiza CV-ului.</blockquote><figcaption>Kit AI pentru joburi</figcaption></figure></div></div>
+  <div class="fc-love-row rev"><div class="fc-love-track"><figure class="fc-q"><blockquote>Am aplicat la 8 joburi săptămâna trecută și am primit interviuri la 5 dintre ele. De 7 luni tot caut și nimic.</blockquote><figcaption>5-Day Challenge</figcaption></figure><figure class="fc-q"><blockquote>Mi-am găsit job! Am cheltuit mii de euro înainte și nu am învățat nici un sfert față de ce oferi tu!</blockquote><figcaption>Cursul AI</figcaption></figure><figure class="fc-q"><blockquote>Aplic de 2 săptămâni cu noul CV și am 3 interviuri. Eu, care nu am avut unul timp de un an.</blockquote><figcaption>CV &amp; LinkedIn</figcaption></figure><figure class="fc-q"><blockquote>Pentru prima dată simt că cineva explică pas cu pas, clar și fără să ne încarce cu teorie inutilă.</blockquote><figcaption>5-Day Challenge</figcaption></figure><figure class="fc-q"><blockquote>Am luat jobul și îți mulțumesc mult pentru ajutor!</blockquote><figcaption>Clientă</figcaption></figure></div></div>
+  <p class="fc-love-note">Mesaje primite de la cursanți și clienți. Numele sunt ascunse.</p>
+ </section>`;
+ ch.after(t.content);
+ document.querySelectorAll('#feedback .fc-love-track').forEach(function(tr){Array.prototype.slice.call(tr.children).forEach(function(f){var c=f.cloneNode(true);c.setAttribute('aria-hidden','true');tr.appendChild(c);});});
+})();
+</script>
